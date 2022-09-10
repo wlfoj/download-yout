@@ -4,6 +4,9 @@ from pytube.exceptions import VideoPrivate
 from pytube.exceptions import ExtractError
 from pytube.exceptions import VideoUnavailable
 
+import os
+
+PATH = 'download'
 
 def menu():
     """Função que mantém o usuário no processo até que o mesmo decida sair"""
@@ -35,13 +38,14 @@ def main():
     elif(not err and option ==2):
         download_video(url)
 
-
+#https://www.youtube.com/watch?v=q_oy97fTn3w
 def download_audio(url: str):
     '''Procedimento para baixar apenas o audio'''
     try:
         yt = YouTube(url)
         audio = yt.streams.filter(only_audio=True)[0]
-        audio.download('download/')
+        audio.download(PATH+'/')
+        os.rename(PATH+'/'+audio.default_filename, PATH+'/'+audio.default_filename+'.mp3')
         print(f"O download de '{audio.title}' concluído com sucesso!!")
     except RegexMatchError:
         print('Link com problemas, verifique se está correto')
@@ -58,7 +62,7 @@ def download_video(url: str):
     try:
         yt = YouTube(url)
         video = yt.streams.filter(file_extension='mp4')[0]
-        video.download('download/')
+        video.download(PATH+'/')
         print(f"O download de '{video.title}' concluído com sucesso!!")
     except RegexMatchError:
         print('Link com problemas, verifique se está correto')
