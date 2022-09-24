@@ -8,10 +8,19 @@ import os
 
 PATH = 'download'
 
+def clean_screen():
+    """Procedimento para limpar a tela"""
+    if os.name == 'nt':
+        os.system('cls')
+    else:
+        os.system("clear")
+
+
 def menu():
     """Função que mantém o usuário no processo até que o mesmo decida sair"""
     continuar = 's'.lower()
     while continuar == 's':
+        clean_screen()
         main()
         continuar = input("Digite S para continuar e qualquer outra tecla para sair: ").lower()
 
@@ -19,8 +28,6 @@ def menu():
 def main():
     err = False # Não é mais necessário
     url = input('Digite o link do video: ')
-    print('\n')
-
     while True:
         try:
             option = input('Digite [1] para baixar áudio/ [2] para baixar o vídeo:  ')
