@@ -1,9 +1,12 @@
 # Informações
-Se não precisa do console, use o arquivo ´direct.py´ basta colocar a url em `URL`
+Se não precisa do console, use o arquivo ´`direct.py`
 
 ## Requerimentos minimos do ambiente
-```$ python3 -m venv env.```
-```$ pip install -r /path/to/requirements.txt```
+#### Para criar (Se não houver)
+```$ python3 -m venv env.```  
+#### Para instalar as depêndencias
+```$ pip install -r requirements.txt```
+
 ## Ativando o ambiente
 ### Windows
 ```$ env\Scripts\activate.bat```
