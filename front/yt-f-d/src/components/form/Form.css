@@ -1,0 +1,22 @@
+.top-h {
+    margin-top: 20px;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.box-buttons{
+    height: auto;
+    width: auto;
+    display: flex;
+    justify-content: space-between;
+}
+
+.alinha-vertical{
+    align-items: center;
+}
+
+.total{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
