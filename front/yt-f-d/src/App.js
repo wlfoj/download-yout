@@ -16,7 +16,7 @@ function App() {
 	return (
 		<div className="App">
 			<header>
-				<Form onEnviar={updatePreviewBox}></Form>
+				<Form fupdatePreviewBox={updatePreviewBox}></Form>
 			</header>
 			
 			<section className="App-section">

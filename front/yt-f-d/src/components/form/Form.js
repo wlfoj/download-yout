@@ -1,5 +1,6 @@
 import React from 'react';
 import { useState } from 'react';
+import axios from 'axios';
 
 import './Form.css';
 
@@ -22,7 +23,7 @@ import Button from '@mui/material/Button';
 // Componente da página do loading
 import Loading_Page from '../loading-page/Loading-Page';
 
-function Form({ updatePreviewBox }) {
+function Form({ fupdatePreviewBox }) {
     
     /*=== PARA O ALERT ===*/
     // Usado para auxiliar na exibição dos alertas
@@ -49,34 +50,23 @@ function Form({ updatePreviewBox }) {
 		// Passo pelo formatador
 		let link_form = formatTextUrl(text);
 		// Envio para o componente pai que irá atualizar o Preview Box
-		updatePreviewBox(link_form);
+		fupdatePreviewBox(link_form);
     };
 
     /*=== PARA O BOTÃO DOWNLOAD ===*/
     const handleButtonDownloadClick = () => {
         setIsLoading(true);// Já inicio o processo de download subindo a tela de load
 
-        fetch('http://127.0.0.1:5000/api/V1/' + type, {
-            method: 'POST', 
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ url: text })
-        })
+        axios.post('http://127.0.0.1:5000/api/V1/' + type, { url: text })
         .then(response => {
-            if (!response.ok) {
-                throw new Error('Erro na requisição');
-            }
             setIsAlertVisible(200);// Coloco o alert de sucess
-            return response.json();
-        })
-        .then(data => {
-            //console.log('Resposta da API:', data);
+          console.log('Resposta da API:', response.data);
         })
         .catch(error => {
             setIsAlertVisible(500);// Coloco o alert de error
-            console.error('Erro ao fazer requisição:', error);
+          console.error('Erro ao fazer requisição:', error);
         });
+
         setIsLoading(false); // Ao fim de tudo, removo a tela de load
         
       };

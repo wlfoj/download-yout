@@ -11,7 +11,7 @@ from pytube.exceptions import VideoUnavailable
 from Downloader import Downloader
 
 app = Flask(__name__)
-CORS(app)
+CORS(app) 
 
 swagger = Swagger(app)
 
@@ -38,7 +38,7 @@ def Hello(name):
 
 
 
-@app.route(prefix + "mp3/", methods=['POST'])
+@app.route(prefix + "mp3/", methods=['POST', 'OPTIONS'])
 def Download_MP3():
     """
     Baixa o áudio de um vídeo no YT a partir da URL fornecida.
