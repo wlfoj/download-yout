@@ -1,7 +1,8 @@
 from flask import Flask, request, jsonify
-from flasgger import Swagger
 
-from flask_cors import CORS
+import json
+
+from flasgger import Swagger
 
 from pytube.exceptions import RegexMatchError
 from pytube.exceptions import VideoPrivate
@@ -11,7 +12,6 @@ from pytube.exceptions import VideoUnavailable
 from Downloader import Downloader
 
 app = Flask(__name__)
-CORS(app) 
 
 swagger = Swagger(app)
 
@@ -32,13 +32,12 @@ def Hello(name):
       500:
         description: API com problemas??.
     """
-
-    res = {'message': 'Olá ' + name +' Funcionando normalmente'}
+    res = {'message': 'Olá ' + name +', estamos funcionando normalmente'}
     return jsonify(res), 200
 
 
 
-@app.route(prefix + "mp3/", methods=['POST', 'OPTIONS'])
+@app.route(prefix + "mp3/", methods=['POST'])
 def Download_MP3():
     """
     Baixa o áudio de um vídeo no YT a partir da URL fornecida.
@@ -66,8 +65,7 @@ def Download_MP3():
       500:
         description: Houve um problema interno ao processar a solicitação.
     """
-
-    dados = request.json  
+    dados = json.loads(request.data)
     url = dados['url']
 
     # Fazer o captador de exceção aqui
@@ -114,8 +112,7 @@ def Download_MP4():
       500:
         description: Houve um problema interno ao processar a solicitação.
     """
-
-    dados = request.json  
+    dados = json.loads(request.data)
     url = dados['url']
 
     # Fazer o captador de exceção aqui

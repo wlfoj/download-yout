@@ -1,3 +1,2 @@
-#Set-Location -Path ".\back\"
-Start-Process python -ArgumentList ".\back\app.py"
-#. python .\back\app.py
+. back\env2\Scripts\activate
+#Start-Process python -ArgumentList ".\back\app.py"

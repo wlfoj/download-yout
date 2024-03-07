@@ -1,6 +1,5 @@
 import React from 'react';
 import { useState } from 'react';
-import axios from 'axios';
 
 import './Form.css';
 
@@ -24,7 +23,9 @@ import Button from '@mui/material/Button';
 import Loading_Page from '../loading-page/Loading-Page';
 
 function Form({ fupdatePreviewBox }) {
-    
+    /*=== PARA A TELA DE LOAD ===*/
+    const [isLoading, setIsLoading] = useState(false);
+
     /*=== PARA O ALERT ===*/
     // Usado para auxiliar na exibição dos alertas
     const [isAlertVisible, setIsAlertVisible] = useState(0);
@@ -56,23 +57,26 @@ function Form({ fupdatePreviewBox }) {
     /*=== PARA O BOTÃO DOWNLOAD ===*/
     const handleButtonDownloadClick = () => {
         setIsLoading(true);// Já inicio o processo de download subindo a tela de load
-
-        axios.post('http://127.0.0.1:5000/api/V1/' + type, { url: text })
-        .then(response => {
-            setIsAlertVisible(200);// Coloco o alert de sucess
-          console.log('Resposta da API:', response.data);
-        })
-        .catch(error => {
-            setIsAlertVisible(500);// Coloco o alert de error
-          console.error('Erro ao fazer requisição:', error);
-        });
-
-        setIsLoading(false); // Ao fim de tudo, removo a tela de load
         
-      };
-
-    /*=== PARA A TELA DE LOAD ===*/
-    const [isLoading, setIsLoading] = useState(false);
+        fetch('http://127.0.0.1:5000/api/V1/' + type, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ url: text })
+            })
+            .then(response => {
+              setIsAlertVisible(200); // Coloca o alert de sucesso
+            })
+            .catch(error => {
+              setIsAlertVisible(500); // Coloca o alert de erro
+              console.error('Erro ao fazer requisição:', error);
+            })
+            .finally(()=>{
+                setIsLoading(false); // Ao fim de tudo, removo a tela de load
+            });
+        };
 
     return (
         <div className='top-h center'>
@@ -121,7 +125,7 @@ function Form({ fupdatePreviewBox }) {
             </Box>
             
             {/* TELA DE LOADING */}
-            {isLoading && <Loading_Page />}
+            {isLoading==true && <Loading_Page />}
 
             {/* ALERTAS DE SUCESSO E ERRO */}
             {isAlertVisible == 200 && 

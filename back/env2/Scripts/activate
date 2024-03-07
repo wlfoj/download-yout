@@ -38,7 +38,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="C:\Users\washi\OneDrive\Documentos\Github\download-yout\env2"
+VIRTUAL_ENV="C:\Users\washi\OneDrive\Documentos\Github\download-yout\back\env2"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"
