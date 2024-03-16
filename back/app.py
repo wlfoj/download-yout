@@ -2,24 +2,30 @@ from flask import Flask, request, jsonify
 
 import json
 
+import logging
+
 from flasgger import Swagger
+
+from Downloader import Downloader
 
 from pytube.exceptions import RegexMatchError
 from pytube.exceptions import VideoPrivate
 from pytube.exceptions import ExtractError
 from pytube.exceptions import VideoUnavailable
 
-from Downloader import Downloader
+
+# ===== Configuração do logg ===== #
+logger = logging.getLogger(__name__)
+logging.basicConfig(format='[%(asctime)s] [%(levelname)s] [%(module)s]: %(message)s', datefmt='%m/%d/%Y %I:%M:%S %zH %p',
+                    filename='back/logs.log', encoding='utf-8', level=logging.DEBUG)
 
 app = Flask(__name__)
-
+prefix = "/api/V1/"
 swagger = Swagger(app)
-
 downloader = Downloader()
 
-prefix = "/api/V1/"
 
-
+# ========== Definição das Rotas ========== #
 @app.route(prefix + '<string:name>/', methods=['GET'])
 def Hello(name):
     """
@@ -33,6 +39,7 @@ def Hello(name):
         description: API com problemas??.
     """
     res = {'message': 'Olá ' + name +', estamos funcionando normalmente'}
+    logger.info('Verificou-se o status da aplicação')
     return jsonify(res), 200
 
 
@@ -67,19 +74,24 @@ def Download_MP3():
     """
     dados = json.loads(request.data)
     url = dados['url']
-
+    logger.info('Recebido solicitação de download para mp3 no link %s ', url)
     # Fazer o captador de exceção aqui
     try:
         downloader.get_audio_mp3(url)
-        res = {'message': 'baixa mp3'}
+        logger.info('Solicitação de download para mp3 no link %s foi atendida com sucesso', url)
+        res = {'message': 'audio downloaded'}
         return jsonify(res), 201
-    except RegexMatchError:
+    except RegexMatchError as err:
+        logger.exception('Download interrompido. A exceção foi lançada. ' + err)
         return jsonify({'error': 'Link inválido'}), 400
-    except VideoUnavailable:
+    except VideoUnavailable as err:
+        logger.exception('Download interrompido. A exceção foi lançada. ' + err)
         return jsonify({'error': 'Vídeo não disponível para download'}), 404
-    except VideoPrivate:
+    except VideoPrivate as err:
+        logger.exception('Download interrompido. A exceção foi lançada. ' + err)
         return jsonify({'error': 'Vídeo não encontrado'}), 404
-    except Exception: #??????
+    except Exception as err: #??????
+        logger.error('Download interrompido. A exceção foi lançada. ' + err)
         return jsonify({'error': 'Vídeo não encontrado'}), 500
     
 
@@ -114,19 +126,24 @@ def Download_MP4():
     """
     dados = json.loads(request.data)
     url = dados['url']
-
+    logger.info('Recebido solicitação de download para mp4 no link %s ', url)
     # Fazer o captador de exceção aqui
     try:
         downloader.get_video_mp4(url)
-        res = {'message': 'baixa mp4'}
+        res = {'message': 'video downloaded'}
+        logger.info('Solicitação de download para mp3 no link %s foi atendida com sucesso', url)
         return jsonify(res), 201
-    except RegexMatchError:
+    except RegexMatchError as err:
+        logger.exception('Download interrompido. A exceção foi lançada. ' + err)
         return jsonify({'error': 'Link inválido'}), 400
-    except VideoUnavailable:
+    except VideoUnavailable as err:
+        logger.exception('Download interrompido. A exceção foi lançada. ' + err)
         return jsonify({'error': 'Vídeo não disponível para download'}), 404
-    except VideoPrivate:
+    except VideoPrivate as err:
+        logger.exception('Download interrompido. A exceção foi lançada. ' + err)
         return jsonify({'error': 'Vídeo não encontrado'}), 404
-    except Exception: #??????
+    except Exception as err: #??????
+        logger.error('Download interrompido. A exceção foi lançada. ' + err)
         return jsonify({'error': 'Vídeo não encontrado'}), 500
 
 
