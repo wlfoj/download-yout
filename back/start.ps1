@@ -1,2 +1,5 @@
-. back\env2\Scripts\activate
-#Start-Process python -ArgumentList ".\back\app.py"
+# Ativa o ambiente virtual
+. back\env\Scripts\activate
+
+# Executa o app flask
+. python .\back\app.py
